@@ -49,18 +49,18 @@ public class SocketChannel : Channel {
         try sock.setBlocking(mode: false)
     }
     
-    private func readListeningSocket() throws -> AnyObject {
+    private func readListeningSocket() throws -> Any {
         let newSock = try self.sock.acceptClientConnection()
         debugPrint("Accepted connection from: \(newSock.remoteHostname) on port \(newSock.remotePort)")
         debugPrint("Socket Signature: \(String(describing: newSock.signature?.description))")
-        return try SocketChannel(with: newSock) as AnyObject
+        return try SocketChannel(with: newSock)
     }
     
-    private func readDataSocket() throws -> AnyObject {
+    private func readDataSocket() throws -> Any {
         var data = Data()
         let count = try self.sock.read(into: &data)
         debugPrint("read event handler called \(self), data \(data) read \(count) bytes")
-        return data as AnyObject
+        return data
     }
     
     public func register(withQueue: DispatchQueue) {
