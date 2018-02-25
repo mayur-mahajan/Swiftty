@@ -8,5 +8,6 @@ osx_image: xcode9.2
 install:
   - eval "$(curl -sL https://swiftenv.fuller.li/install.sh)"
 script:
+  - swift --version
   - swift build
   - swift test
