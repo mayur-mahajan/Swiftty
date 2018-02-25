@@ -108,7 +108,7 @@ class ServerBootstrapAcceptor: ChannelHandlerAdapter {
         super.init(named: "ServerBootstrapAcceptor")
     }
 
-    override func onRead(ctx: ChannelHandlerContext, data: AnyObject) {
+    override func onRead(ctx: ChannelHandlerContext, data: Any) {
         if let socket = data as? SocketChannel {
             debugPrint("ServerBootstrapAcceptor read called with data \(data)...")
             socket.register(withQueue: queueHolder.next)

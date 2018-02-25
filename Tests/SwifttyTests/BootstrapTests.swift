@@ -3,20 +3,20 @@ import XCTest
 
 class BootstrapTests: XCTestCase {
     class ByteToStringCodec: ChannelHandlerAdapter {
-        override func onWrite(ctx: ChannelHandlerContext, data: AnyObject) {
+        override func onWrite(ctx: ChannelHandlerContext, data: Any) {
             if let data = data as? String,
                 let obj = data.data(using: .utf8) {
-                ctx.fireWrite(message: obj as AnyObject)
+                ctx.fireWrite(message: obj)
             }
             else {
                 ctx.fireRead(message: data)
             }
         }
         
-        override func onRead(ctx: ChannelHandlerContext, data: AnyObject) {
-            if let data = data as? Data {
-                let strMessage = String(data: data, encoding: .utf8)
-                ctx.fireRead(message: strMessage as AnyObject)
+        override func onRead(ctx: ChannelHandlerContext, data: Any) {
+            if let data = data as? Data,
+                let strMessage = String(data: data, encoding: .utf8) {
+                ctx.fireRead(message: strMessage)
             }
             else {
                 ctx.fireRead(message: data)
@@ -32,7 +32,7 @@ class BootstrapTests: XCTestCase {
             super.init(named: named)
         }
         
-        override func onRead(ctx: ChannelHandlerContext, data: AnyObject) {
+        override func onRead(ctx: ChannelHandlerContext, data: Any) {
             guard let message = data as? String else {
                 print("unexpected message received, forwarding..")
                 ctx.fireRead(message: data)
@@ -49,7 +49,7 @@ class BootstrapTests: XCTestCase {
 
             // Echo back the message
             print("received string \(message), echoing back")
-            ctx.fireWrite(message: message as AnyObject)
+            ctx.fireWrite(message: message)
         }
     }
 

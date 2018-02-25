@@ -37,8 +37,8 @@ public protocol ChannelTriggers {
     func fireActive()
     func fireInactive()
 
-    func fireRead(message: AnyObject)
-    func fireWrite(message: AnyObject)
+    func fireRead(message: Any)
+    func fireWrite(message: Any)
     func fireError(error: ChannelError)
 }
 
@@ -49,8 +49,8 @@ public protocol ChannelEvents {
     func onActive(ctx: ChannelHandlerContext)
     func onInactive(ctx: ChannelHandlerContext)
     
-    func onRead(ctx: ChannelHandlerContext, data: AnyObject)
-    func onWrite(ctx: ChannelHandlerContext, data: AnyObject)
+    func onRead(ctx: ChannelHandlerContext, data: Any)
+    func onWrite(ctx: ChannelHandlerContext, data: Any)
     func onError(ctx: ChannelHandlerContext, error: ChannelError)
 }
 

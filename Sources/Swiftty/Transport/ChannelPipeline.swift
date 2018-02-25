@@ -1,7 +1,7 @@
 import Foundation
 import Dispatch
 
-public protocol ChannelPipeline: AnyObject, ChannelTriggers {
+public protocol ChannelPipeline: ChannelTriggers {
     func add(first: ChannelHandler) -> ChannelPipeline
     func add(last: ChannelHandler) -> ChannelPipeline
     func add(_ handler: ChannelHandler, after: ChannelHandler) -> ChannelPipeline
@@ -92,11 +92,11 @@ class DefaultChannelPipeline: ChannelPipeline {
         head.handler.onInactive(ctx: head)
     }
     
-    func fireRead(message: AnyObject) {
+    func fireRead(message: Any) {
         head.handler.onRead(ctx: head, data: message)
     }
     
-    func fireWrite(message: AnyObject) {
+    func fireWrite(message: Any) {
         tail.handler.onWrite(ctx: tail, data: message)
     }
     
@@ -143,13 +143,13 @@ class DefaultChannelHandlerContext: ChannelHandlerContext {
         }
     }
 
-    func fireRead(message: AnyObject) {
+    func fireRead(message: Any) {
         if let nextCtx = next {
             nextCtx.handler.onRead(ctx: nextCtx, data: message)
         }
     }
     
-    func fireWrite(message: AnyObject) {
+    func fireWrite(message: Any) {
         if let prevCtx = prev {
             prevCtx.handler.onWrite(ctx: prevCtx, data: message)
         }
@@ -179,10 +179,10 @@ open class ChannelHandlerAdapter : ChannelHandler {
     open func onInactive(ctx: ChannelHandlerContext) {
         ctx.fireInactive()
     }
-    open func onRead(ctx: ChannelHandlerContext, data: AnyObject) {
+    open func onRead(ctx: ChannelHandlerContext, data: Any) {
         ctx.fireRead(message: data)
     }
-    open func onWrite(ctx: ChannelHandlerContext, data: AnyObject) {
+    open func onWrite(ctx: ChannelHandlerContext, data: Any) {
         ctx.fireWrite(message: data)
     }
 
@@ -203,7 +203,7 @@ class HeadContext : DefaultChannelHandlerContext {
             super.init(named: "HeadHandler")
         }
         
-        override func onWrite(ctx: ChannelHandlerContext, data: AnyObject) {
+        override func onWrite(ctx: ChannelHandlerContext, data: Any) {
             guard let msg = data as? Data else {
                 debugPrint("expecting message of type 'Data'")
                 return
@@ -229,7 +229,7 @@ class TailContext : DefaultChannelHandlerContext {
             print("Error: \(error) reached end of pipeline")
         }
         
-        override func onRead(ctx: ChannelHandlerContext, data: AnyObject) {
+        override func onRead(ctx: ChannelHandlerContext, data: Any) {
             print("Error: read event reached end of pipeline for \(data)")
         }
     }
