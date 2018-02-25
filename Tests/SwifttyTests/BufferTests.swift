@@ -2,6 +2,13 @@ import XCTest
 @testable import Swiftty
 
 class BufferTests: XCTestCase {
+    static var allTests : [(String, (BufferTests) -> () throws -> Void)] {
+        return [
+            ("testEmptyBuffer", testEmptyBuffer),
+            ("testFixedBufferFromArray", testFixedBufferFromArray),
+        ]
+    }
+
     func testEmptyBuffer() {
         let buf: Buffer = DirectBuffer()
         
@@ -17,14 +24,3 @@ class BufferTests: XCTestCase {
         XCTAssertEqual(buf.isWriteable, false, "Buffer is writeable")
     }
 }
-
-#if os(Linux)
-    extension BufferTests {
-        static var allTests : [(String, BufferTests -> () throws -> Void)] {
-            return [
-                ("testEmptyBuffer", testEmptyBuffer),
-                ("testFixedBufferFromArray", testFixedBufferFromArray),
-            ]
-        }
-    }
-#endif

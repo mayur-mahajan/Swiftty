@@ -3,6 +3,12 @@ import XCTest
 
 class BootstrapTests: XCTestCase {
 
+    static var allTests : [(String, (BootstrapTests) -> () throws -> Void)] {
+        return [
+            ("testServerBootstrap", testServerBootstrap),
+        ]
+    }
+
     class EchoHandler: ChannelHandlerAdapter {
         let latch: CountdownLatch
 
@@ -72,16 +78,4 @@ class BootstrapTests: XCTestCase {
             print("accept hannel closed")
         }
     }
-
 }
-
-#if os(Linux)
-    extension BootstrapTests {
-        static var allTests : [(String, BootstrapTests -> () throws -> Void)] {
-            return [
-                ("testServerBootstrap", testServerBootstrap),
-            ]
-        }
-    }
-#endif
-
