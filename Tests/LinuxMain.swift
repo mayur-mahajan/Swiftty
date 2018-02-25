@@ -1,5 +1,5 @@
 import XCTest
-@testable import Swiftty
+@testable import SwifttyTests
  
 XCTMain([
     testCase(BufferTests.allTests),
