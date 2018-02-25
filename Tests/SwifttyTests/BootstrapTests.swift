@@ -2,27 +2,6 @@ import XCTest
 @testable import Swiftty
 
 class BootstrapTests: XCTestCase {
-    class ByteToStringCodec: ChannelHandlerAdapter {
-        override func onWrite(ctx: ChannelHandlerContext, data: Any) {
-            if let data = data as? String,
-                let obj = data.data(using: .utf8) {
-                ctx.fireWrite(message: obj)
-            }
-            else {
-                ctx.fireRead(message: data)
-            }
-        }
-        
-        override func onRead(ctx: ChannelHandlerContext, data: Any) {
-            if let data = data as? Data,
-                let strMessage = String(data: data, encoding: .utf8) {
-                ctx.fireRead(message: strMessage)
-            }
-            else {
-                ctx.fireRead(message: data)
-            }
-        }
-    }
 
     class EchoHandler: ChannelHandlerAdapter {
         let latch: CountdownLatch
@@ -69,7 +48,7 @@ class BootstrapTests: XCTestCase {
             .childInitializer() { channel in
                 print("Child initializer called on \(channel)")
                 _ = channel.pipeline?
-                    .add(last: ByteToStringCodec(named: "b2s"))
+                    .add(last: BufferToStringCodec(named: "b2s"))
                     .add(last: EchoHandler(named: "echo", latch: latch))
             }
             
